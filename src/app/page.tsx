@@ -60,7 +60,7 @@ interface WeatherData {
 }
 
 export default function Home() {
-  const { isPending, error, data } = useQuery<WeatherData>({
+  const { isLoading, error, data } = useQuery<WeatherData>({
     queryKey: ['repoData'],
     queryFn: async () => {
       const { data } = await axios.get(
@@ -69,11 +69,15 @@ export default function Home() {
       return data;
     },
   });
+  
+  console.log("data", data?data.city.name:"");
 
-  if (isPending) return <div>Loading...</div>;
-  if (error) return <div>Error: {(error as Error).message}</div>;
-
-  console.log(data);
+  if (isLoading)
+    return (
+  <div className="flex items-center min-h-screen justify-center">
+    <p className="animate-bounce">Loading...</p>
+  </div>
+    );
 
   return (
     <div className="flex flex-col gap-4 bg-grey-100 min-h-screen">
